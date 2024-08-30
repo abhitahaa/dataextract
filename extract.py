@@ -11,7 +11,7 @@ if len(sys.argv) < 2:
 input_2080_file = sys.argv[1]  # Input 2080 file name passed from PowerShell
 
 # Define custom paths
-base_directory = "C:/Users/YourUsername/Desktop/Bosfiles"
+base_directory = "C:/Users/YourUsername/Desktop/files"
 temp_txt_file = os.path.join(base_directory, "temp_data.txt")  # Custom path for temporary text file
 output_csv_file = os.path.join(base_directory, "output_data.csv")  # Custom path for final CSV file
 
