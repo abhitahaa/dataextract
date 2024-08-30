@@ -1,6 +1,7 @@
 import re
 import sys
 import csv
+import os
 
 # Get the input 2080 file name from the command-line arguments
 if len(sys.argv) < 2:
@@ -8,12 +9,17 @@ if len(sys.argv) < 2:
     sys.exit(1)
 
 input_2080_file = sys.argv[1]  # Input 2080 file name passed from PowerShell
-temp_txt_file = "temp_data.txt"  # Temporary text file with | delimiter
-output_csv_file = "output_data.csv"  # Final CSV file
+
+# Define custom paths
+base_directory = "C:/Users/YourUsername/Desktop/Bosfiles"
+temp_txt_file = os.path.join(base_directory, "temp_data.txt")  # Custom path for temporary text file
+output_csv_file = os.path.join(base_directory, "output_data.csv")  # Custom path for final CSV file
 
 # Define the keys to extract from each log line
 keys_to_extract = [
-    
+    'Loco_ID', 'TrainSymbol', 'Head_End_Milepost', 'Head_End_Track_name',
+    'Head_End_Railroad_SCAC', 'Head_End_PTC_Subdivision/District_ID',
+    'Rear_End_Milepost', 'Flags'
 ]
 
 # Define the regex pattern for date extraction
@@ -38,9 +44,14 @@ with open(input_2080_file, 'r') as infile:
             if match:
                 log_entry[key] = match.group(1)
 
-        # Include only records that have all keys
-        if all(key in log_entry for key in keys_to_extract):
+        # Include only records that have at least one key
+        if any(key in log_entry for key in keys_to_extract):
             all_data.append(log_entry)
+
+# Check if data was extracted successfully
+if not all_data:
+    print("No valid records found. Please check the input file and patterns.")
+    sys.exit(1)
 
 # Write the data to the temporary text file with | as the delimiter
 with open(temp_txt_file, 'w') as outfile:
@@ -49,7 +60,7 @@ with open(temp_txt_file, 'w') as outfile:
         outfile.write(line + '\n')
 
 # Convert the text file to CSV
-with open(temp_txt_file, 'r') as infile, open(output_csv_file, 'w', newline='') as outfile:
+with open(temp_txt_file, 'r') as infile, open(output_csv_file, 'wb') as outfile:
     csv_writer = csv.writer(outfile)
     csv_writer.writerow(['Date'] + keys_to_extract)
     for line in infile:
