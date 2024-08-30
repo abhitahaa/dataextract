@@ -17,9 +17,7 @@ output_csv_file = os.path.join(base_directory, "output_data.csv")  # Custom path
 
 # Define the keys to extract from each log line
 keys_to_extract = [
-    'Loco_ID', 'TrainSymbol', 'Head_End_Milepost', 'Head_End_Track_name',
-    'Head_End_Railroad_SCAC', 'Head_End_PTC_Subdivision/District_ID',
-    'Rear_End_Milepost', 'Flags'
+   
 ]
 
 # Define the regex pattern for date extraction
